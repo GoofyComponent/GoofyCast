@@ -1,8 +1,9 @@
 #include <iostream>
-
 #include "Color.hpp"
+#include "Image.hpp"
 
 using namespace std;
+
 
 int main()
 {    
@@ -16,5 +17,20 @@ int main()
 
     Color yellow = red + green;
 
-    cout << "Yellow : " << yellow << std::endl;    
+    cout << "Yellow : " << yellow << std::endl;
+
+    // Create an image in memory, and fill it with yellow
+    Image image(512, 512, yellow);
+
+    // Make a red square on the top left of the image
+    for (int y = 0; y < 100; y++) {
+      for (int x = 0; x < 100; x++) {
+        image.SetPixel(x, y, Color(1, 0, 0));
+      }
+      for (int x = 200; x < 300; x++) {
+        image.SetPixel(x, y, Color(1, 1, 1));
+      }
+    }
+    
+    image.WriteFile("test.png");
 }
