@@ -1,36 +1,37 @@
 #include <iostream>
 #include "Color.hpp"
 #include "Image.hpp"
+#include "Uinputs.hpp"
 
 using namespace std;
 
 
 int main()
 {    
+    UserInputs userInputs;
+    
     Color red(1, 0, 0);
-    Color green(0, 1, 0);
     Color black;
 
     cout << "Red : " << red << std::endl;
-    cout << "Green : " << green << std::endl;
     cout << "Black : " << black << std::endl;
 
-    Color yellow = red + green;
+    int WIDTH = userInputs.AskIntInput("Enter the width of the image : ");
+    int HEIGHT = userInputs.AskIntInput("Enter the height of the image : ");
 
-    cout << "Yellow : " << yellow << std::endl;
+    Image image(WIDTH, HEIGHT, black);
 
-    // Create an image in memory, and fill it with yellow
-    Image image(512, 512, yellow);
+    int centerX = WIDTH / 2;
+    int centerY = HEIGHT / 2;
+    int radius = min(WIDTH, HEIGHT) / 4;
 
-    // Make a red square on the top left of the image
-    for (int y = 0; y < 100; y++) {
-      for (int x = 0; x < 100; x++) {
-        image.SetPixel(x, y, Color(1, 0, 0));
-      }
-      for (int x = 200; x < 300; x++) {
-        image.SetPixel(x, y, Color(1, 1, 1));
-      }
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            if ((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY) < radius * radius) {
+                image.SetPixel(x, y, red);
+            }
+        }
     }
     
-    image.WriteFile("test.png");
+    image.WriteFile("circle.png");
 }
