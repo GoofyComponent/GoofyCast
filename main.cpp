@@ -33,5 +33,5 @@ int main()
         }
     }
     
-    image.WriteFile("circle.png");
+    image.WriteFile("../../../circle.png");
 }
