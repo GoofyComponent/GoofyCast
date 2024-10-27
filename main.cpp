@@ -4,6 +4,48 @@
 
 using namespace std;
 
+void generateAmogus() {
+    Color backgroundColor(1, 1, 1);
+    Color susColor(1, 0, 0);
+    Color impostorColor(0, 0, 1);
+
+
+    const int ROWS = 4;
+    const int COLS = 4;
+
+    Image image(ROWS, COLS, backgroundColor);
+
+
+    bool susAmogus[ROWS][COLS];
+    for (int i = 0; i < ROWS; ++i) {
+        for (int j = 0; j < COLS; ++j) {
+            susAmogus[i][j] = false;
+        }
+    }
+
+    susAmogus[1][0] = true;
+    susAmogus[2][0] = true;
+    susAmogus[3][0] = true;
+    susAmogus[0][1] = true;
+    susAmogus[1][1] = true;
+    susAmogus[0][2] = true;
+    susAmogus[1][2] = true;
+    susAmogus[2][2] = true;
+    susAmogus[3][2] = true;
+    susAmogus[1][3] = true;
+    susAmogus[3][3] = true;
+
+
+    for (int i = 0; i < ROWS; ++i) {
+        for (int j = 0; j < COLS; ++j) {
+            if (susAmogus[i][j]) {
+                image.SetPixel(i, j, susColor);
+            }
+        }
+    }
+
+    image.WriteFile("amogus.png");
+}
 
 int main()
 {    
@@ -33,4 +75,6 @@ int main()
     }
     
     image.WriteFile("test.png");
+
+    generateAmogus();
 }
