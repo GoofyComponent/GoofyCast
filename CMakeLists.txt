@@ -12,12 +12,15 @@ target_include_directories(goofycast PUBLIC
                            "${PROJECT_SOURCE_DIR}/src/raymath"
                             "${PROJECT_SOURCE_DIR}/src/rayimage"
                             "${PROJECT_SOURCE_DIR}/src/lodepng"
+                            "${PROJECT_SOURCE_DIR}/src/userinputs"
                            )
 
 add_subdirectory(./src/raymath)
 add_subdirectory(./src/rayimage)
 add_subdirectory(./src/lodepng)
+add_subdirectory(./src/userinputs)
 
 target_link_libraries(goofycast PUBLIC raymath)
 target_link_libraries(goofycast PUBLIC rayimage)
 target_link_libraries(goofycast PUBLIC lodepng)
+target_link_libraries(goofycast PUBLIC userinputs)
