@@ -35,13 +35,10 @@ int main()
     std::cout << "image size :" << WIDTH << " x " << HEIGHT << std::endl;
 
     for(int y = 0; y < HEIGHT; y++) {
-        std::cout << "\033[2J\033[1;1H";
-        std::cout << "Percentage calculated : " << (y * 100) / HEIGHT << "%" << std::endl;
         for(int x = 0; x < WIDTH; x++) {
             auto pixel_center = pixel_0_0_loc + pixel_delta_u * x + pixel_delta_v * y;
             auto ray_direction = pixel_center - camera_center;
             Raytrace r(camera_center, ray_direction);
-            std::cout << ray_direction << std::endl;
 
             Color color_instance;
             Color pixel_color = color_instance.ray_color(r);
