@@ -13,10 +13,13 @@ int main()
 
     UserInputs userInputs;
 
-    int WIDTH = userInputs.AskIntInput("Enter the width of the image : ");
-    int HEIGHT = userInputs.AskIntInput("Enter the height of the image : ");
+    //int WIDTH = userInputs.AskIntInput("Enter the width of the image : ");
+    //int HEIGHT = userInputs.AskIntInput("Enter the height of the image : ");
+    int WIDTH = 1920;
+    int HEIGHT = 1080;
 
-    auto focal_length = userInputs.AskFloatInput("Enter the focal length of the camera : ");
+    //auto focal_length = userInputs.AskFloatInput("Enter the focal length of the camera : ");
+    auto focal_length = 2;
     Image image(WIDTH, HEIGHT, Color(0, 0, 0));
     auto viewport_height = 2;
     auto viewport_width = 2;
