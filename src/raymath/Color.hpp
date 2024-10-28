@@ -1,17 +1,16 @@
 #pragma once
 
 #include <iostream>
+#include "../vec3/Vec3.hpp"
 
 /** 
  * @class Color
  * @brief Initialize a color with 3 components : Red, Green and Blue
 **/
-class  Color
+class Color
 {
 private:
-  float r = 0;
-  float b = 0;
-  float g = 0;
+  vec3 color;
 public:
   /**
    * @brief Create a black color
@@ -23,16 +22,16 @@ public:
    * @param iG : green component
    * @param iB : blue component
    */
-  Color(float r, float g, float b);
+  Color(float iR, float iG, float iB);
   /** 
    * @brief Destructor of the color
    * @details Used to free the memory allocated for the color
    */
   ~ Color();
 
-  float R();
-  float G();
-  float B();
+  float R() const;
+  float G() const;
+  float B() const;
 
   /**
    * @brief Overloads the + operator to add two colors.
@@ -49,7 +48,7 @@ public:
    * Color result = c1 + c2; // result will have the values (150, 200, 250)
    * @endcode
    */
-  Color operator+(Color const& col);
+  Color operator+(Color const& col) const;
 
   /**
    * @brief Overloads the = operator to assign a color to another.
