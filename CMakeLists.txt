@@ -14,6 +14,7 @@ target_include_directories(goofycast PUBLIC
     "${PROJECT_SOURCE_DIR}/src/lodepng"
     "${PROJECT_SOURCE_DIR}/src/userinputs"
     "${PROJECT_SOURCE_DIR}/src/vec3"
+    "${PROJECT_SOURCE_DIR}/src/raytrace"
 )
 
 add_subdirectory(./src/raymath)
@@ -21,5 +22,6 @@ add_subdirectory(./src/rayimage)
 add_subdirectory(./src/lodepng)
 add_subdirectory(./src/userinputs)
 add_subdirectory(./src/vec3)
+add_subdirectory(./src/raytrace)
 
-target_link_libraries(goofycast PUBLIC raymath rayimage lodepng userinputs vec3)
+target_link_libraries(goofycast PUBLIC raymath rayimage lodepng userinputs vec3 raytrace)
