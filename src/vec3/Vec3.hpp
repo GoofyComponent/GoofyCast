@@ -25,6 +25,8 @@ class vec3 {
     float length_squared() const;
 };
 
+using point3 = vec3;
+
 std::ostream& operator<<(std::ostream& out, const vec3& v);
 vec3 operator+(const vec3& u, const vec3& v);
 vec3 operator-(const vec3& u, const vec3& v);

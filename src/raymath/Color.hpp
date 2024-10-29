@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include "../vec3/Vec3.hpp"
+#include "../raytrace/Raytrace.hpp"
+
 
 /** 
  * @class Color
@@ -66,6 +68,21 @@ public:
    * @endcode
    */
   Color& operator=(Color const& col);
+
+
+  Color operator*(double scalar) const;
+
+
+  /**
+   * @brief Computes the color based on a ray.
+   * 
+   * This function calculates the color of a ray by interpolating between two colors
+   * based on the direction of the ray.
+   * 
+   * @param r The Raytrace object containing the ray information.
+   * @return Color The resulting color.
+   */
+  Color ray_color(const Raytrace& r) const;
 
   /**
    * @brief Overriding the output stream operator.
