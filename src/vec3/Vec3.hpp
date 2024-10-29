@@ -23,7 +23,6 @@ class vec3 {
 
     double length() const;
     double length_squared() const;
-    vec3 normalized() const;
 };
 
 using point3 = vec3;
