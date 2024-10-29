@@ -16,5 +16,3 @@ const vec3& raytrace::direction() const {
 point3 raytrace::at(double t) const {
     return orig + t * dir;
 }
-
-
