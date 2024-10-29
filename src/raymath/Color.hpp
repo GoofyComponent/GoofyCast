@@ -5,6 +5,8 @@
 #include "../raytrace/Raytrace.hpp"
 
 
+using color = vec3;
+
 /** 
  * @class Color
  * @brief Initialize a color with 3 components : Red, Green and Blue
@@ -25,6 +27,7 @@ public:
    * @param iB : blue component
    */
   Color(float iR, float iG, float iB);
+  Color(const vec3& vec);
   /** 
    * @brief Destructor of the color
    * @details Used to free the memory allocated for the color
@@ -69,20 +72,8 @@ public:
    */
   Color& operator=(Color const& col);
 
-
-  Color operator*(double scalar) const;
-
-
-  /**
-   * @brief Computes the color based on a ray.
-   * 
-   * This function calculates the color of a ray by interpolating between two colors
-   * based on the direction of the ray.
-   * 
-   * @param r The Raytrace object containing the ray information.
-   * @return Color The resulting color.
-   */
-  Color ray_color(const Raytrace& r) const;
+  friend Color operator*(double t, const Color& col);
+  friend Color operator*(const Color& col, double t);
 
   /**
    * @brief Overriding the output stream operator.
