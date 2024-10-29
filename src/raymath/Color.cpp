@@ -4,6 +4,7 @@
 Color::Color() : color(0, 0, 0) {}
 
 Color::Color(float iR, float iG, float iB) : color(iR, iG, iB) {}
+Color::Color(const vec3& vec) : color(vec) {}
 
 Color::~Color() {}
 
@@ -23,15 +24,12 @@ Color& Color::operator=(const Color& col) {
     return *this;
 }
 
-Color Color::operator*(double scalar) const {
-    return Color(color.x() * scalar, color.y() * scalar, color.z() * scalar);
+Color operator*(double t, const Color& col) {
+    return Color(t * col.R(), t * col.G(), t * col.B());
 }
 
-Color Color::ray_color(const Raytrace& r) const {
-    vec3 unit_direction = unit_vector(r.direction());
-    auto t = 0.5 * (unit_direction.y() + 1.0);
-
-    return Color(1.0, 1.0, 1.0) * (1.0 - t) + Color(0.5, 0.7, 1.0) * t;
+Color operator*(const Color& col, double t) {
+    return Color(t * col.R(), t * col.G(), t * col.B());
 }
 
 std::ostream& operator<<(std::ostream& _stream, const Color& col) {
