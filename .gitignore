@@ -34,4 +34,4 @@
 /build
 /out
 .vscode
-output
+image_*
