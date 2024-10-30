@@ -1,14 +1,33 @@
 #include "main.hpp"
 
-color ray_color(const raytrace& r, const hittable& world) {
+color ray_color(const raytrace& r, const hittable& world, const std::vector<Light> &lights) {
     hit_record rec;
     if (world.hit(r, 0, infinity, rec)) {
-        return 0.5 * (rec.normal + color(1,1,1));
+        //return 0.5 * (rec.normal + color(1,1,1));
+        //return rec.material->diffuse_color;
+
+        float diffuse_intensity = 0.0;
+        for (auto light : lights) {
+            vec3 light_direction = unit_vector(light.position - rec.p);
+            float light_distance = (light.position - rec.p).length();
+            raytrace shadow_ray = raytrace(rec.p, light_direction);
+            hit_record shadow_rec;
+            if (world.hit(shadow_ray, 0.001, light_distance, shadow_rec)) {
+                diffuse_intensity += 0.0;
+            } else {
+                diffuse_intensity += light.intensity * std::max(0.0f, static_cast<float>(dot(rec.normal, light_direction)));
+            }
+        }
+        return rec.material->diffuse_color * diffuse_intensity;
     }
 
     vec3 unit_direction = unit_vector(r.direction());
     auto a = 0.5*(unit_direction.y() + 1.0);
-    return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0);
+    //return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0); //Background color - blend blue and white
+    //Make a cyan only background
+    //return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.0, 1.0, 1.0);
+    //Make a black only background
+    return color(0, 0, 0);
 }
 
 int main() {
@@ -23,6 +42,8 @@ int main() {
 
     double theta = degrees_to_radians(fov);
 
+    
+    //auto aspect_ratio = 1.0 / 1.0;
     auto aspect_ratio = 16.0 / 9.0;
     int image_width = 2440;
     int image_height = int(image_width / aspect_ratio);
@@ -42,14 +63,19 @@ int main() {
     auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
     hittable_list scene;
-    scene.add(make_shared<sphere>(point3(0, 0, -1), 0.2));
-    scene.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
-    scene.add(make_shared<sphere>(point3(0.7, 0, -.6), 0.2));
-    scene.add(make_shared<sphere>(point3(-0.7, 0, -2), 0.2));
-    // scene.add(make_shared<sphere>(point3(0, 0, -.5), 0.5));
-    //scene.add(make_shared<sphere>(point3(0, 0, -1.5), 0.5));
-    //scene.add(make_shared<sphere>(point3(0.5, 0.2, -.5), 0.3));
-    // scene.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
+    Material mat1(vec3(0.8, 0.3, 0.3));
+    Material ivory(vec3(0.4, 0.4, 0.3));
+    Material red_rubber(vec3(0.3, 0.1, 0.1));
+    scene.add(make_shared<sphere>(point3(0, 0, -1), 0.2, ivory));
+    //Make a sphere with a radius of 0.5 on the right side of the screen
+    scene.add(make_shared<sphere>(point3(1, 0, -1), 0.5, red_rubber));
+    //Make a sphere with a radius of 0.5 on the left side of the screen
+    scene.add(make_shared<sphere>(point3(-1, 0, -1), 0.5, mat1));
+    scene.add(make_shared<sphere>(point3(-.8, 0, -2), .7, red_rubber));
+
+    Light light1(vec3(0, 0, 0), point3(0, 0, -1), 0.5);
+    Light light2(vec3(1, 1, 1), point3(0, 0, -1), 0.5);
+
 
 
     std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
@@ -65,7 +91,7 @@ int main() {
         auto ray_direction = unit_vector(pixel_center - camera_center); 
         raytrace r(camera_center, ray_direction);
 
-        color pixel_color = ray_color(r, scene);
+        color pixel_color = ray_color(r, scene, {light1, light2});
 
         if (i >= 0 && i < image_width && j >= 0 && j < image_height) {
             image.SetPixel(i, j, pixel_color);

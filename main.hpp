@@ -5,6 +5,9 @@
 #include <sstream>
 #include <iomanip>
 #include <string>
+#include <algorithm>
+
+#include "GcastUtils.cpp"
 #include "Color.hpp"
 #include "Image.hpp"
 #include "Uinputs.hpp"
