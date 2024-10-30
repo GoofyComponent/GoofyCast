@@ -1,20 +1,20 @@
-#include "Raytrace.hpp"
+#include "Raytrace.hpp" 
 
-raytrace::raytrace() {}
-
-raytrace::raytrace(const point3& origin, const vec3& direction) 
-    : orig(origin), dir(direction) {}
-
-const point3& raytrace::origin() const {
-    return orig;
+Raytrace::Raytrace() {
+    origin = Vec3();
+    direction = Vec3();
 }
 
-const vec3& raytrace::direction() const {
-    return dir;
+Raytrace::Raytrace(const Vec3& origin, const Vec3& direction) : origin(origin), direction(direction) {}
+
+const Vec3& Raytrace::getOrigin() const {
+    return origin;
 }
 
-point3 raytrace::at(double t) const {
-    return orig + t * dir;
+const Vec3& Raytrace::getDirection() const {
+    return direction;
 }
 
-
+Vec3 Raytrace::at(float t) const {
+    return origin + direction * t;
+}

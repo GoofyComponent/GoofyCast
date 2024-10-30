@@ -1,40 +1,28 @@
 #pragma once
-#include <cmath>
-#include <iostream>
 
-class vec3 {
-  public:
-    double e[3];
 
-    vec3();
-    vec3(double e0, double e1, double e2);
+class Vec3 {
+    public:
+        float x, y, z;
 
-    double x() const;
-    double y() const;
-    double z() const;
+        Vec3();
+        Vec3(float x, float y, float z);
+        Vec3(const Vec3& v);
 
-    vec3 operator-() const;
-    double operator[](int i) const;
-    double& operator[](int i);
+        Vec3 operator+(const Vec3& v) const;
+        Vec3 operator-(const Vec3& v) const;
+        Vec3 operator*(float s) const;
+        Vec3 operator/(float s) const;
 
-    vec3& operator+=(const vec3& v);
-    vec3& operator*=(double t);
-    vec3& operator/=(double t);
+        Vec3& operator+=(const Vec3& v);
+        Vec3& operator-=(const Vec3& v);
+        Vec3& operator*=(float s);
+        Vec3& operator/=(float s);
 
-    double length() const;
-    double length_squared() const;
-    vec3 normalized() const;
+        Vec3 operator-() const;
+
+        float dot(const Vec3& v) const;
+        Vec3 cross(const Vec3& v) const;
+        float length() const;
+        Vec3 normalize() const;
 };
-
-using point3 = vec3;
-
-std::ostream& operator<<(std::ostream& out, const vec3& v);
-vec3 operator+(const vec3& u, const vec3& v);
-vec3 operator-(const vec3& u, const vec3& v);
-vec3 operator*(const vec3& u, const vec3& v);
-vec3 operator*(double t, const vec3& v);
-vec3 operator*(const vec3& v, double t);
-vec3 operator/(const vec3& v, double t);
-double dot(const vec3& u, const vec3& v);
-vec3 cross(const vec3& u, const vec3& v);
-vec3 unit_vector(const vec3& v);

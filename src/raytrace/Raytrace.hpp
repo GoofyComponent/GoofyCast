@@ -1,17 +1,19 @@
 #pragma once
-#include "../vec3/Vec3.hpp"
 
-class raytrace {
-  public:
-    raytrace();
-    raytrace(const point3& origin, const vec3& direction);
+#include "../vec3/vec3.hpp"
 
-    const point3& origin() const;
-    const vec3& direction() const;
+class Raytrace {
+public:
+    Raytrace();
 
-    point3 at(double t) const;
+    Raytrace(const Vec3& origin, const Vec3& direction) : origin(origin), direction(direction) {}
 
-  private:
-    point3 orig;
-    vec3 dir;
+    const Vec3& getOrigin() const;
+    const Vec3& getDirection() const;
+
+    Vec3 at(float t) const;
+
+private:
+    Vec3 origin;
+    Vec3 direction;
 };

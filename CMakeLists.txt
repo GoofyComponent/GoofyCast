@@ -9,21 +9,21 @@ add_executable(goofycast main.cpp)
 # Since our project is name goofycast, we need to use the target name goofycast instead of raytracer (the example project name)
 target_include_directories(goofycast PUBLIC
     "${PROJECT_BINARY_DIR}"
-    "${PROJECT_SOURCE_DIR}/src/raymath"
-    "${PROJECT_SOURCE_DIR}/src/rayimage"
     "${PROJECT_SOURCE_DIR}/src/lodepng"
-    "${PROJECT_SOURCE_DIR}/src/userinputs"
     "${PROJECT_SOURCE_DIR}/src/vec3"
+    "${PROJECT_SOURCE_DIR}/src/camera"
+    "${PROJECT_SOURCE_DIR}/src/rayimage"
+    "${PROJECT_SOURCE_DIR}/src/raymath"
+    "${PROJECT_SOURCE_DIR}/src/objects"
     "${PROJECT_SOURCE_DIR}/src/raytrace"
-    "${PROJECT_SOURCE_DIR}/src/object"
 )
 
-add_subdirectory(./src/raymath)
-add_subdirectory(./src/rayimage)
 add_subdirectory(./src/lodepng)
-add_subdirectory(./src/userinputs)
 add_subdirectory(./src/vec3)
+add_subdirectory(./src/camera)
+add_subdirectory(./src/rayimage)
+add_subdirectory(./src/raymath)
+add_subdirectory(./src/objects)
 add_subdirectory(./src/raytrace)
-add_subdirectory(./src/object)
 
-target_link_libraries(goofycast PUBLIC raymath rayimage lodepng userinputs vec3 raytrace object hittable)
+target_link_libraries(goofycast PUBLIC lodepng vec3 camera image color objects raytrace)

@@ -11,7 +11,6 @@ Image:: Image(unsigned int w, unsigned int h) : width(w), height(h)
   }
 }
 
-
 Image:: Image(unsigned int w, unsigned int h, Color c) : width(w), height(h)
 {  
   buffer.resize(width * height);
@@ -20,17 +19,15 @@ Image:: Image(unsigned int w, unsigned int h, Color c) : width(w), height(h)
   }
 }
 
-
 Image::~ Image()
 {
 }
 
 void Image::SetPixel(unsigned int x, unsigned int y, Color color) {
-    if (x >= width || y >= height) {
-        throw std::invalid_argument("Image: Invalid index");
-    }
-    unsigned int index = (y * width) + x;
-    buffer[index] = color;
+  unsigned int index = (y * width) + x;
+
+  if (index >= buffer.size()) { throw std::invalid_argument("Image: Invalid index"); }
+  buffer[index] = color;
 }
 
 Color Image::GetPixel(unsigned int x, unsigned int y) {
@@ -42,8 +39,6 @@ Color Image::GetPixel(unsigned int x, unsigned int y) {
 
 
 void Image::WriteFile(const char * filename) {
-  std::cout << "Writing image to file " << filename << std::endl;
-
   std::vector<unsigned char> image;
   image.resize(width * height * 4);
   for(unsigned index = 0; index < buffer.size(); index++) {
