@@ -1,32 +1,32 @@
 #include "main.hpp"
 
+vec3 reflect(const vec3 &I, const vec3 &N) {
+    return I - N*2.f*(I*N);
+}
+
 color ray_color(const raytrace& r, const hittable& world, const std::vector<Light> &lights) {
     hit_record rec;
     if (world.hit(r, 0, infinity, rec)) {
-        //return 0.5 * (rec.normal + color(1,1,1));
-        //return rec.material->diffuse_color;
+        vec3 diffuse_intensity(0.0f, 0.0f, 0.0f); // Initialisation de diffuse_intensity en tant que vec3
+        vec3 specular_light_intensity(0.0f, 0.0f, 0.0f); // Initialisation de specular_light_intensity en tant que vec3
 
-        float diffuse_intensity = 0.0;
         for (auto light : lights) {
             vec3 light_direction = unit_vector(light.position - rec.p);
             float light_distance = (light.position - rec.p).length();
             raytrace shadow_ray = raytrace(rec.p, light_direction);
             hit_record shadow_rec;
             if (world.hit(shadow_ray, 0.001, light_distance, shadow_rec)) {
-                diffuse_intensity += 0.0;
+                continue;
             } else {
-                diffuse_intensity += light.intensity * std::max(0.0f, static_cast<float>(dot(rec.normal, light_direction)));
+                vec3 light_color_intensity = light.color * light.intensity;
+                diffuse_intensity += light_color_intensity * std::max(0.0f, static_cast<float>(dot(rec.normal, light_direction)));
+                specular_light_intensity += powf(std::max(0.0f, static_cast<float>(dot(-reflect(-light_direction, rec.normal), r.direction()))), rec.material->specular_exponent) * light_color_intensity;
             }
         }
-        return rec.material->diffuse_color * diffuse_intensity;
-    }
+        return rec.material->diffuse_color * diffuse_intensity * rec.material->albedo_x + vec3(1., 1., 1.) * specular_light_intensity * rec.material->albedo_y;
 
-    vec3 unit_direction = unit_vector(r.direction());
-    auto a = 0.5*(unit_direction.y() + 1.0);
-    //return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.5, 0.7, 1.0); //Background color - blend blue and white
-    //Make a cyan only background
-    //return (1.0-a)*color(1.0, 1.0, 1.0) + a*color(0.0, 1.0, 1.0);
-    //Make a black only background
+    }
+    
     return color(0, 0, 0);
 }
 
@@ -63,18 +63,20 @@ int main() {
     auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
     hittable_list scene;
-    Material mat1(vec3(0.8, 0.3, 0.3));
-    Material ivory(vec3(0.4, 0.4, 0.3));
-    Material red_rubber(vec3(0.3, 0.1, 0.1));
+    Material ivory(0.6, 0.3,vec3(0.4, 0.4, 0.3), 50.0);
+    Material red_rubber(0.9, 0.1, vec3(0.3, 0.1, 0.1), 10.0);
+    Material metal(0.1, 0.8, vec3(0.8, 0.6, 0.2), 1425.0);
     scene.add(make_shared<sphere>(point3(0, 0, -1), 0.2, ivory));
-    //Make a sphere with a radius of 0.5 on the right side of the screen
     scene.add(make_shared<sphere>(point3(1, 0, -1), 0.5, red_rubber));
-    //Make a sphere with a radius of 0.5 on the left side of the screen
-    scene.add(make_shared<sphere>(point3(-1, 0, -1), 0.5, mat1));
     scene.add(make_shared<sphere>(point3(-.8, 0, -2), .7, red_rubber));
+    scene.add(make_shared<sphere>(point3(-.2, .7, -.7), .2, metal));
 
-    Light light1(vec3(0, 0, 0), point3(0, 0, -1), 0.5);
-    Light light2(vec3(1, 1, 1), point3(0, 0, -1), 0.5);
+
+    std::vector<Light>  lights;
+    lights.push_back(Light(vec3(0, 0, 0), vec3(1, 1, 1), 1.0));
+    lights.push_back(Light(vec3(1, 1, 0), vec3(1, 1, 1), 1.0));
+    lights.push_back(Light(vec3(-1, -1, 0), vec3(1, 1, 1), 1.0));
+    lights.push_back(Light(vec3(-.8, -.3, 0), vec3(0,1,1), 1.0));
 
 
 
@@ -91,7 +93,7 @@ int main() {
         auto ray_direction = unit_vector(pixel_center - camera_center); 
         raytrace r(camera_center, ray_direction);
 
-        color pixel_color = ray_color(r, scene, {light1, light2});
+        color pixel_color = ray_color(r, scene, lights);
 
         if (i >= 0 && i < image_width && j >= 0 && j < image_height) {
             image.SetPixel(i, j, pixel_color);
