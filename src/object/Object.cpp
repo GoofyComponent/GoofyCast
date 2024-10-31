@@ -1,7 +1,7 @@
 #include "Object.hpp"
 
-sphere::sphere(const point3& center, double radius)
-    : center(center), radius(std::fmax(0, radius)) {}
+sphere::sphere(const point3& center, double radius, const Material& material)
+    : center(center), radius(radius), material(material) {}
 
 bool sphere::hit(const raytrace& r, double ray_tmin, double ray_tmax, hit_record& rec) const {
     vec3 oc = center - r.origin();
@@ -26,6 +26,7 @@ bool sphere::hit(const raytrace& r, double ray_tmin, double ray_tmax, hit_record
     //rec.normal = (rec.p - center) / radius;
     vec3 outward_normal = (rec.p - center) / radius;
     rec.set_face_normal(r, outward_normal);
+    rec.material = std::make_shared<Material>(material);
 
     return true;
 }
